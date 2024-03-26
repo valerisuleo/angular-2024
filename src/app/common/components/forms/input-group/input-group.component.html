@@ -1,0 +1,6 @@
+<ng-container [formGroup]="formGroup">
+    <div class="form-group mb-4">
+        <label [for]="props.name">{{ props.label }}</label>
+        <input [formControlName]="props.name" [type]="props.type" class="form-control" />
+    </div>
+</ng-container>

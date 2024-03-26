@@ -1,0 +1,30 @@
+<main class="container">
+    <div class="row p-3">
+        <div class="col-6 mx-auto">
+            <h1>Todos App</h1>
+            <div class="my-2">
+                <form [formGroup]="newTodo" (ngSubmit)="handleSubmit($event)">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Input Group Component occupying most of the space -->
+                        <div class="flex-grow-1 me-5">
+                            <input-group-component
+                                [formGroup]="newTodo"
+                                [props]="propsInput"
+                            ></input-group-component>
+                        </div>
+                        <!-- Button Component with fixed width or automatic based on content -->
+                        <div>
+                            <button-component [props]="propsBtn"></button-component>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="my-2">
+                <list-group-component
+                    [props]="propsList"
+                    (onEmitEvent)="handleEvent($event)"
+                ></list-group-component>
+            </div>
+        </div>
+    </div>
+</main>

@@ -1,0 +1,12 @@
+<ul class="list-group">
+    <li
+        style="cursor: pointer"
+        *ngFor="let item of props.collection; let i = index"
+        (click)="setActiveIndex(i, item)"
+        [class]="
+            activeIndex === i ? 'list-group-item active' : 'list-group-item'
+        "
+    >
+        {{ item[props.propText] }}
+    </li>
+</ul>

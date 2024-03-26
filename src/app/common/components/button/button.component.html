@@ -1,0 +1,11 @@
+<button
+    (click)="emitEvent()"
+    [type]="props.type"
+    [ngClass]="[
+        'btn',
+        'btn-' + props.classes.contextual,
+        'btn-' + props.classes.size
+    ]"
+>
+    {{ props.label }}
+</button>
