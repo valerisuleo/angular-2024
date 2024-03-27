@@ -1,0 +1,24 @@
+<div class="row my-5">
+    <div class="col">
+        <p>Count: {{ count() }}</p>
+        <!-- <p>Double Count: {{ doubleCounter() }}</p> -->
+        <button class="btn btn-primary me-2" (click)="incrementSet()">
+            incrementSet
+        </button>
+        <button class="btn btn-primary me-2" (click)="incrementUpdate()">
+            incrementUpdate
+        </button>
+        <button class="btn btn-primary me-2" (click)="decrement()">
+            Decrement
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button class="btn btn-primary mb-4" (click)="addTodo()">
+            add Todo
+        </button>
+        <list-group-component [props]="props"></list-group-component>
+    </div>
+</div>

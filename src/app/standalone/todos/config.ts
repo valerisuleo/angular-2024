@@ -1,6 +1,6 @@
-import { IListGroup } from '../common/components/list-group/list-group.component';
-import { IBtn } from '../common/components/button/button.component';
-import { InputGroup } from '../common/components/forms/input-group/input-group.component';
+import { IListGroup } from '../../common/components/list-group/list-group.component';
+import { IBtn } from '../../common/components/button/button.component';
+import { InputGroup } from '../../common/components/forms/input-group/input-group.component';
 
 export const propsList: IListGroup = {
     collection: [], // Initially empty, will be populated dynamically
@@ -18,6 +18,6 @@ export const propsBtn: IBtn = {
 
 export const propsInput: InputGroup = {
     label: 'New todo',
-    name: 'taskName',
+    name: 'title',
     type: 'text',
 };

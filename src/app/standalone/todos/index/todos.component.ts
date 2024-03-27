@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ButtonComponent } from '../common/components/button/button.component';
-import { ListGroupComponent } from '../common/components/list-group/list-group.component';
-import { InputGroupComponent } from '../common/components/forms/input-group/input-group.component';
-import { propsBtn, propsInput, propsList } from './config';
-import { TodosService } from './todos.service';
+import { ButtonComponent } from '../../../common/components/button/button.component';
+import { ListGroupComponent } from '../../../common/components/list-group/list-group.component';
+import { InputGroupComponent } from '../../../common/components/forms/input-group/input-group.component';
+import { propsBtn, propsInput, propsList } from '../config';
+import { TodosService } from '../todos.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
-import { ITodo } from './interfaces';
+import { ITodo } from '../interfaces';
 
 @Component({
     selector: 'todos-list',
@@ -48,13 +48,12 @@ export class TodosComponent implements OnInit, OnDestroy {
             .get(params)
             .pipe(takeUntil(this.destroyed$))
             .subscribe((response: ITodo[]) => {
-                this.todos = response;
-                propsList.collection = response;
+                this.propsList.collection = response;
             });
     }
 
     public newTodo = new FormGroup({
-        taskName: new FormControl(''),
+        title: new FormControl(''),
     });
 
     public handleEvent(current: ITodo): void {
@@ -63,15 +62,15 @@ export class TodosComponent implements OnInit, OnDestroy {
 
     public handleSubmit(e: Event): void {
         e.preventDefault();
-        const { taskName } = this.newTodo.value;
+        const { title } = this.newTodo.value;
         const newTodo = {
             id: 4,
             userId: 1,
-            title: taskName,
+            title: title,
             completed: true,
         } as ITodo;
 
-        this.todos.unshift(newTodo);
+        this.propsList.collection = [newTodo, ...this.propsList.collection];
         this.newTodo.reset();
     }
 }

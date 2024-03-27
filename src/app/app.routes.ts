@@ -1,7 +1,11 @@
 import { Route } from '@angular/router';
-import { TodosComponent } from './todos/todos.component';
+import { CounterComponent } from './signal/counter.component';
 
 export const appRoutes: Route[] = [
-    { path: '', pathMatch: 'full', redirectTo: 'todos' },
-    { path: 'todos', component: TodosComponent },
+    {
+        path: 'todos',
+        loadChildren: () => import('./standalone/todos/routes').then((r) => r.todosRoutes),
+    },
+    { path: 'signal', component: CounterComponent },
+    { path: '**', redirectTo: 'todos' },
 ];

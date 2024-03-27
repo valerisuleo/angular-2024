@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataService } from '../common/data.service';
+import { DataService } from '../../common/data.service';
 import { HttpClient } from '@angular/common/http';
 import { ITodo } from './interfaces';
 
