@@ -14,7 +14,7 @@ export interface InputGroup {
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule],
     templateUrl: './input-group.component.html',
-    styleUrl: './input-group.component.css',
+    styleUrl: './input-group.component.scss',
 })
 export class InputGroupComponent {
     @Input() props = {} as InputGroup;

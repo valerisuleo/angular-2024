@@ -1,42 +1,57 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ButtonComponent, IBtn } from '../common/components/button/button.component';
-import {
-    IListGroup,
-    ListGroupComponent,
-} from '../common/components/list-group/list-group.component';
-import {
-    InputGroupComponent,
-    InputGroup,
-} from '../common/components/forms/input-group/input-group.component';
+import { ButtonComponent } from '../common/components/button/button.component';
+import { ListGroupComponent } from '../common/components/list-group/list-group.component';
+import { InputGroupComponent } from '../common/components/forms/input-group/input-group.component';
+import { propsBtn, propsInput, propsList } from './config';
+import { TodosService } from './todos.service';
+import { HttpClientModule } from '@angular/common/http';
+import { Subject, takeUntil } from 'rxjs';
+import { ITodo } from './interfaces';
 
-interface ITodo {
-    id: number;
-    task: string;
-    done: boolean;
-}
 @Component({
     selector: 'todos-list',
     templateUrl: './todos.component.html',
     styleUrl: './todos.component.scss',
     standalone: true,
+    providers: [TodosService],
     imports: [
         CommonModule,
         ListGroupComponent,
         ButtonComponent,
         InputGroupComponent,
         ReactiveFormsModule,
+        HttpClientModule,
     ],
 })
-export class TodosComponent {
-    public items = [
-        { id: 1, task: 'washing', done: false },
-        { id: 2, task: 'cleaning', done: false },
-        { id: 3, task: 'homework', done: false },
-        { id: 4, task: 'sleep', done: false },
-        { id: 5, task: 'buy shoes', done: false },
-    ];
+export class TodosComponent implements OnInit, OnDestroy {
+    public todos: ITodo[] = [];
+    public propsBtn = propsBtn;
+    public propsInput = propsInput;
+    public propsList = propsList;
+    private destroyed$: Subject<boolean> = new Subject();
+
+    constructor(private service: TodosService) {}
+
+    public ngOnInit(): void {
+        this.getTodos();
+    }
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    private getTodos(): void {
+        const params = '?_limit=10';
+        this.service
+            .get(params)
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((response: ITodo[]) => {
+                this.todos = response;
+                propsList.collection = response;
+            });
+    }
 
     public newTodo = new FormGroup({
         taskName: new FormControl(''),
@@ -51,29 +66,12 @@ export class TodosComponent {
         const { taskName } = this.newTodo.value;
         const newTodo = {
             id: 4,
-            task: taskName,
-            done: true,
+            userId: 1,
+            title: taskName,
+            completed: true,
         } as ITodo;
 
-        this.items.unshift(newTodo);
+        this.todos.unshift(newTodo);
+        this.newTodo.reset();
     }
-
-    public propsList: IListGroup = {
-        collection: this.items,
-        propText: 'task',
-    };
-
-    public propsBtn: IBtn = {
-        label: 'Save',
-        type: 'submit',
-        classes: {
-            contextual: 'primary',
-            size: 'md',
-        },
-    };
-    public propsInput: InputGroup = {
-        label: 'New todo',
-        name: 'taskName',
-        type: 'text',
-    };
 }

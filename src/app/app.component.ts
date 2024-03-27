@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { TodosComponent } from './todos/todos.component';
 
 @Component({
-  standalone: true,
-  imports: [TodosComponent, RouterModule],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    standalone: true,
+    imports: [RouterModule],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'standalone-components';
+    title = 'standalone-components';
 }
