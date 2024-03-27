@@ -1,82 +1,136 @@
 {
-  "name": "standalone-components",
-  "$schema": "node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
-  "prefix": "",
-  "sourceRoot": "./src",
-  "tags": [],
-  "targets": {
-    "build": {
-      "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/standalone-components",
-        "index": "./src/index.html",
-        "main": "./src/main.ts",
-        "polyfills": ["zone.js"],
-        "tsConfig": "./tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
-        "assets": ["./src/favicon.ico", "./src/assets"],
-        "styles": ["./src/styles.scss"],
-        "scripts": []
-      },
-      "configurations": {
-        "production": {
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+    "name": "standalone-components",
+    "$schema": "node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "prefix": "",
+    "sourceRoot": "./src",
+    "tags": [],
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:browser",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/standalone-components/browser",
+                "index": "./src/index.html",
+                "main": "./src/main.ts",
+                "polyfills": ["zone.js"],
+                "tsConfig": "./tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": ["./src/favicon.ico", "./src/assets"],
+                "styles": ["./src/styles.scss"],
+                "scripts": []
             },
-            {
-              "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
-              "maximumError": "4kb"
+            "configurations": {
+                "production": {
+                    "budgets": [
+                        {
+                            "type": "initial",
+                            "maximumWarning": "500kb",
+                            "maximumError": "1mb"
+                        },
+                        {
+                            "type": "anyComponentStyle",
+                            "maximumWarning": "2kb",
+                            "maximumError": "4kb"
+                        }
+                    ],
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "vendorChunk": true,
+                    "extractLicenses": false,
+                    "sourceMap": true,
+                    "namedChunks": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "buildTarget": "standalone-components:build:production"
+                },
+                "development": {
+                    "buildTarget": "standalone-components:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n",
+            "options": {
+                "buildTarget": "standalone-components:build"
             }
-          ],
-          "outputHashing": "all"
         },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "vendorChunk": true,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
-      "configurations": {
-        "production": {
-          "buildTarget": "standalone-components:build:production"
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "options": {
+                "lintFilePatterns": ["./src"]
+            }
         },
-        "development": {
-          "buildTarget": "standalone-components:build:development"
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectName}"],
+            "options": {
+                "jestConfig": "jest.config.ts"
+            }
+        },
+        "server": {
+            "dependsOn": ["build"],
+            "executor": "@angular-devkit/build-angular:server",
+            "options": {
+                "outputPath": "dist/standalone-components/server",
+                "main": "server.ts",
+                "tsConfig": "tsconfig.server.json",
+                "inlineStyleLanguage": "scss"
+            },
+            "configurations": {
+                "production": {
+                    "outputHashing": "media"
+                },
+                "development": {
+                    "buildOptimizer": false,
+                    "optimization": false,
+                    "sourceMap": true,
+                    "extractLicenses": false,
+                    "vendorChunk": true
+                }
+            },
+            "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+            "executor": "@angular-devkit/build-angular:ssr-dev-server",
+            "configurations": {
+                "development": {
+                    "browserTarget": "standalone-components:build:development",
+                    "serverTarget": "standalone-components:server:development"
+                },
+                "production": {
+                    "browserTarget": "standalone-components:build:production",
+                    "serverTarget": "standalone-components:server:production"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "prerender": {
+            "executor": "@angular-devkit/build-angular:prerender",
+            "options": {
+                "routes": ["/"]
+            },
+            "configurations": {
+                "development": {
+                    "browserTarget": "standalone-components:build:development",
+                    "serverTarget": "standalone-components:server:development"
+                },
+                "production": {
+                    "browserTarget": "standalone-components:build:production",
+                    "serverTarget": "standalone-components:server:production"
+                }
+            },
+            "defaultConfiguration": "production"
         }
-      },
-      "defaultConfiguration": "development"
-    },
-    "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
-      "options": {
-        "buildTarget": "standalone-components:build"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["./src"]
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectName}"],
-      "options": {
-        "jestConfig": "jest.config.ts"
-      }
     }
-  }
 }
