@@ -33,10 +33,13 @@ export class IndexComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         if (this.state.hasKey(this.queryKey)) {
-            this.listProps.collection = this.state.get<IUser[]>(this.queryKey, []);
+            this.listProps.collection = this.state.get<IUser[]>(
+                this.queryKey,
+                []
+            );
         } else {
             this.getUsers();
-            console.log('fire');
+            console.log('It works! I cannot see the log :)');
         }
     }
 
